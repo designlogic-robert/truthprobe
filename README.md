@@ -1,53 +1,73 @@
-# TruthProbe v1.1 — AI Reasoning Transparency Layer  
-*A portable evaluation layer for safer, clearer AI outputs.*
+# TruthProbe v1.1 — Evaluation Samples
 
-TruthProbe is a simple, lightweight reasoning-transparency tool designed for any LLM that accepts structured instructions (ChatGPT, Claude, Gemini, Grok, etc.).
+This repository contains **demonstration and evaluation artifacts** for  
+**TruthProbe v1.1 — AI Reasoning Transparency Layer**.
 
-It does not change how the AI writes.  
-It evaluates how the AI *reasons*.
+TruthProbe does **not** change what the model says.  
+It evaluates *how* the model is reasoning and attaches a short **TruthTail**:
 
-TruthProbe attaches a structured **TruthTail** to every answer, showing:
+- `CertaintyLevel` (0–10 heuristic)
+- `EvidenceStrength` (None / Weak / Moderate / Strong)
+- `BiasRisk` (Low / Moderate / High)
+- `AssumptionsDetected` (implicit premises)
+- `FactVulnerability` (topic risk for hallucinations)
+- `CorrectionNeeded` (Yes/No + reason)
 
-- **CertaintyLevel (0–10)** — Heuristic measure of how confident the model appears.
-- **EvidenceStrength** — None / Weak / Moderate / Strong.
-- **BiasRisk** — Whether the model leans toward a frame or omits alternatives.
-- **AssumptionsDetected** — Implicit premises inside the answer.
-- **FactVulnerability** — Whether the topic is known to trigger hallucinations.
-- **CorrectionNeeded** — Signals when the user should double-check the information.
+These samples show how TruthProbe behaves across different prompts:
 
-### Why This Matters  
-Modern AI feels confident even when it’s wrong.  
-TruthProbe makes that visible.
+- low-risk factual questions
+- speculative / open-ended questions
+- biased framings and leading questions
+- high-risk domains like finance, health, history, and law
 
-Users get a fast mental model:
-> “Can I trust this, or should I re-check?”
+---
 
-### Design Philosophy  
-TruthProbe is built on a simple principle:
-**Reasoning transparency should be portable.**
+## Repository Layout
 
-Inspired by human-readable architecture ideas like:
-- structured intent parsing  
-- adaptive reasoning contexts  
-- validation layers  
-- memory anchoring  
+- **`before-after.md`**  
+  Side-by-side **raw LLM outputs vs. TruthProbe-wrapped outputs**.
 
-TruthProbe follows the same spirit without depending on any proprietary system.
+- **`comparison-table.md`**  
+  Compact table that summarizes how TruthProbe responds across scenarios.
 
-### Who Uses This?
-- Researchers validating claims  
-- Students writing papers  
-- Professionals using AI for decisions  
-- Developers creating safe agent behaviors  
-- Everyday users who want reliability  
+- **`observed-notes.md`**  
+  Short engineering notes: heuristics, edge cases, and future improvements.
 
-TruthProbe is a universal “trust layer” for AI.
+These files are intentionally lightweight and human-readable.  
+They are meant to demonstrate the *evaluation logic*, not full code.
 
-### Files in This Repository
-- `truthprobe-mode.laf` — The structured mode block you paste into any LLM.  
-- `truthprobe-spec.md` — Technical specification + reasoning model.  
-- `example-output.md` — Sample inputs + TruthTail examples.  
-- `calibration-check.md` — Manual test suite to verify proper behavior.
+---
 
-TruthProbe v1.1 is free to use, fork, and extend.
+## How To Read These Samples
 
+1. **Ignore the base answer at first.**  
+   Look only at the **TruthTail** section for each scenario.
+
+2. **Compare scenarios.**  
+   Notice how `CertaintyLevel`, `EvidenceStrength`, and `BiasRisk` change based on:
+   - how speculative the question is
+   - how strong the reasoning is
+   - how loaded or one-sided the prompt is
+
+3. **Check `CorrectionNeeded`.**  
+   This flag is the “user-facing” safety signal:  
+   > *Should I trust this, or should I re-check it?*
+
+---
+
+## Why This Matters
+
+Modern LLMs are extremely confident, even when they are wrong.  
+TruthProbe adds a **portable calibration layer** on top of any model that accepts
+structured instructions (ChatGPT, Claude, Gemini, Grok, etc.).
+
+In practical use:
+
+- Researchers can see when answers are **evidence-light** or **assumption-heavy**.  
+- Builders can wire TruthProbe into **agents, tools, or workflows** as a safety shim.  
+- Everyday users get a fast mental model:  
+  > “Is this answer confident, biased, or risky?”
+
+These samples are the first public step toward a larger **Design Logic safety stack**:
+reasoning transparency, alignment auditing, and human-level quality control
+around AI-generated content.
